@@ -23,42 +23,44 @@ namespace LocationWeather
             var weatherInfo = model.GetWeatherInfo(location);
             var formattedString = MainPageFormattedStrings.GetMainPageContent(location, weatherInfo);
 
-            Content = new StackLayout {
-                BackgroundColor = Color.DarkGreen,
-                Children = {
+            Content = new ScrollView{ 
+                Content = new StackLayout {
+                    BackgroundColor = Color.DarkGreen,
+                    Children = {
                         new Frame {
-                            Content = new Label {
-                                Text = "Open Weather Map",
-                                HorizontalTextAlignment = TextAlignment.Center,
-                                FontSize = 22,
-                                FontAttributes = FontAttributes.Bold,
-                                TextColor = Color.LightGreen
-                            },
-                            BackgroundColor = Color.ForestGreen,
-                        },
+                                        Content = new Label {
+                                            Text = "Open Weather Map",
+                                            HorizontalTextAlignment = TextAlignment.Center,
+                                            FontSize = 22,
+                                            FontAttributes = FontAttributes.Bold,
+                                            TextColor = Color.LightGreen
+                                        },
+                                        BackgroundColor = Color.ForestGreen,
+                                    },
                         new Frame {
-                            BackgroundColor = Color.ForestGreen,
-                            Content = new StackLayout {
-                                BackgroundColor = Color.ForestGreen,
-                                Children = {
-                                    entryLocation,
-                                    new Button {
-                                        BackgroundColor = Color.DarkGreen,
-                                        TextColor = Color.LimeGreen,
-                                        Text = "Apply",
-                                        Command = new Command(OnButtonClicked),
-                                        HorizontalOptions = LayoutOptions.Center
-                                    }
-                                }
-                            }
-                        },
+                                        BackgroundColor = Color.ForestGreen,
+                                        Content = new StackLayout {
+                                            BackgroundColor = Color.ForestGreen,
+                                            Children = {
+                                                entryLocation,
+                                                new Button {
+                                                    BackgroundColor = Color.DarkGreen,
+                                                    TextColor = Color.LimeGreen,
+                                                    Text = "Apply",
+                                                    Command = new Command(OnButtonClicked),
+                                                    HorizontalOptions = LayoutOptions.Center
+                                                }
+                                            }
+                                        }
+                                    },
                         new Label {
-                            BackgroundColor = Color.ForestGreen,
-                            FontSize = 18,
-                            Margin = new Thickness(10, 10, 10, 10),
-                            FormattedText = formattedString
-                        }
-                }
+                                        BackgroundColor = Color.ForestGreen,
+                                        FontSize = 18,
+                                        Margin = new Thickness(10, 10, 10, 10),
+                                        FormattedText = formattedString
+                                    }
+                    }
+                } 
             };
         }
 
