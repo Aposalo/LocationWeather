@@ -4,16 +4,10 @@ namespace OpenWeatherMap.Model
 {
     public class OpenWeatherMapModel
     {
-        private readonly OpenWeatherMapRepository openWeatherMapRepository;
+        private readonly OpenWeatherMapRepository openWeatherMapRepository = new OpenWeatherMapRepository();
         private RootObject weatherInfo;
 
-        public OpenWeatherMapModel(OpenWeatherMapRepository repository)
-        {
-            openWeatherMapRepository = repository;
-        }
-
-        public RootObject GetWeatherInfo(string location)
-        {
+        public RootObject GetWeatherInfo(string location) {
             var response = openWeatherMapRepository.GetWeatherInfo(location);
             
             if (response.IsSuccessful)

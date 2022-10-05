@@ -3,11 +3,12 @@ using OpenWeatherMap.Model;
 using OpenWeatherMap.repository;
 using Xamarin.Forms;
 
-namespace LocationWeather
-{
+namespace LocationWeather {
+
     public class MainPage : ContentPage {
 
-        private OpenWeatherMapModel model = new OpenWeatherMapModel(new OpenWeatherMapRepository());
+        private OpenWeatherMapModel model = new OpenWeatherMapModel();
+        private RootObject weatherInfo = null;
         private Entry entryLocation;
 
         public MainPage() {
@@ -16,26 +17,26 @@ namespace LocationWeather
                 TextColor = Color.LimeGreen,
                 Placeholder = "Please enter a city",
             };
-            InitializeComponent("");
+            InitializeComponent();
         }
 
-        private void InitializeComponent(string location) {
-            var weatherInfo = model.GetWeatherInfo(location);
-            var formattedString = MainPageFormattedStrings.GetMainPageContent(location, weatherInfo);
-
-            Content = new ScrollView{ 
+        private void InitializeComponent() {
+            
+            var formattedString = MainPageFormattedStrings.GetMainPageContent(entryLocation.Text, weatherInfo);
+            
+            Content = new ScrollView { 
                 Content = new StackLayout {
                     BackgroundColor = Color.DarkGreen,
                     Children = {
                         new Frame {
-                                        Content = new Label {
-                                            Text = "Open Weather Map",
-                                            HorizontalTextAlignment = TextAlignment.Center,
-                                            FontSize = 22,
-                                            FontAttributes = FontAttributes.Bold,
-                                            TextColor = Color.LightGreen
-                                        },
-                                        BackgroundColor = Color.ForestGreen,
+                            Content = new Label {
+                                Text = "Open Weather Map",
+                                HorizontalTextAlignment = TextAlignment.Center,
+                                FontSize = 22,
+                                FontAttributes = FontAttributes.Bold,
+                                TextColor = Color.LightGreen
+                            },
+                            BackgroundColor = Color.ForestGreen,
                                     },
                         new Frame {
                                         BackgroundColor = Color.ForestGreen,
@@ -60,13 +61,16 @@ namespace LocationWeather
                                         FormattedText = formattedString
                                     }
                     }
-                } 
+                }
             };
         }
 
         private void OnButtonClicked(object sender) {
-            model = new OpenWeatherMapModel(new OpenWeatherMapRepository());
-            InitializeComponent(entryLocation.Text);
+            if (!string.IsNullOrEmpty(entryLocation.Text)) {
+                weatherInfo = model.GetWeatherInfo(entryLocation.Text);
+            }
+
+            InitializeComponent();
         }
     }
 }
