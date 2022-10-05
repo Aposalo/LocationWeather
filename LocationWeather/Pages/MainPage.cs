@@ -66,6 +66,7 @@ namespace LocationWeather {
         }
 
         private void OnButtonClicked(object sender) {
+            
             if (!string.IsNullOrEmpty(entryLocation.Text)) {
                 weatherInfo = model.GetWeatherInfo(entryLocation.Text);
             }

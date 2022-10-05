@@ -2,8 +2,8 @@
 
 namespace OpenWeatherMap.Model
 {
-    public class OpenWeatherMapModel
-    {
+    public class OpenWeatherMapModel {
+        
         private readonly OpenWeatherMapRepository openWeatherMapRepository = new OpenWeatherMapRepository();
         private RootObject weatherInfo;
 
