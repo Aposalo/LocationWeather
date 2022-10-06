@@ -1,4 +1,4 @@
-﻿using OpenWeatherMap.repository;
+﻿using LocationWeather.Repositories;
 
 namespace OpenWeatherMap.Model
 {

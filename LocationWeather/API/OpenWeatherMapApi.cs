@@ -1,7 +1,8 @@
-﻿using OpenWeatherMap.repository;
+﻿using LocationWeather.Repositories;
+using LocationWeather.Utils;
 using RestSharp;
 
-namespace LocationWeather.Utils
+namespace LocationWeather.Api
 {
     public static class OpenWeatherMapApi
     {
