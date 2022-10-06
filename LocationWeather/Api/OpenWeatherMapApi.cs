@@ -6,12 +6,15 @@ namespace OpenWeatherMap.Api
 {
     public static class OpenWeatherMapApi
     {
+        private static RestClient restClient = new RestClient(Constants.URL);
 
         public static RestResponse<RootObject> GetWeatherInfo(string location) {
-            var client = new RestClient(Constants.URL);
-            var request = new RestRequest("/data/2.5/weather?q=" + location + "&APPID=" + Constants.APPID, Method.Get);
-            request.AddHeader("User-Agent", "Nothing");
-            var contributors = client.Execute<RootObject>(request);
+            
+            var requestQuery = Constants.QUERY_LOCATION + location + Constants.QUERY_TOKEN + Constants.TOKEN;
+            var request = new RestRequest(requestQuery);
+            request.AddHeader(Constants.REQUEST_HEADER_NAME, Constants.REQUEST_HEADER_VALUE);
+            
+            var contributors = restClient.Execute<RootObject>(request);
             return contributors;
         }
     }
