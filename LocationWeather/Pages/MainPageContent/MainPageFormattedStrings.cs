@@ -1,15 +1,15 @@
-﻿using OpenWeatherMap.repository;
-using System;
+﻿using LocationWeather.Utils;
+using OpenWeatherMap.repository;
 using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
+using Xamarin.Forms.Internals;
 
 namespace LocationWeather.Pages.MainPageContent
 {
     public class MainPageFormattedStrings {
 
-        public static FormattedString GetMainPageContent(string location, RootObject weatherInfo) 
-        {
+        public static FormattedString GetMainPageContent(string location, RootObject weatherInfo) {
+            
             if (string.IsNullOrEmpty(location))
                 return NoCityFormattedString;
             
@@ -32,32 +32,33 @@ namespace LocationWeather.Pages.MainPageContent
         private static FormattedString NoCityFormattedString = new FormattedString
         {
             Spans = {
-                GetDefaultSpan("No city was chosen to be displayed.")
+                GetDefaultSpan(Constants.NO_CITY_CHOSEN)
             }
         };
 
         private static FormattedString WrongCityFormattedString(string city) {
             return new FormattedString {
                 Spans = {
-                    GetDefaultSpan("City " + city + " does not exist.")
+                    GetDefaultSpan(Messages.GetNonExistingCityMessage(city))
                 }
             };
         }
 
         private static FormattedString InitializedFormattedString(RootObject weatherInfo) {
+
             return new FormattedString {
                 Spans = {
-                    GetDefaultSpan("Country: " + weatherInfo.sys.country + "\n\n"),
-                    GetDefaultSpan("City Name: " + weatherInfo.name + "\n\n"),
-                    GetDefaultSpan("DateTime: " + DateTime.Now + "\n\n"),
-                    GetDefaultSpan("Coordinates: (" + weatherInfo.coord.lat + ", " + weatherInfo.coord.lon + ")" + "\n\n"),
-                    GetDefaultSpan("Weather: " + weatherInfo.weather[0].main + "\n\n"),
-                    GetDefaultSpan("Weather Description: " + weatherInfo.weather[0].description + "\n\n"),
-                    GetDefaultSpan("Exact Temperature: " + weatherInfo.main.temp + " Kelvin\n\n"),
-                    GetDefaultSpan("Temperature: ( " + weatherInfo.main.temp_min + " Kelvin, " + weatherInfo.main.temp_max + " Kelvin)" + "\n\n"),
-                    GetDefaultSpan("Wind: (" + weatherInfo.wind.speed + " m/s, " + weatherInfo.wind.deg + " degrees)" + "\n\n"),
-                    GetDefaultSpan("Pressure: " + weatherInfo.main.pressure + " hPa\n\n"),
-                    GetDefaultSpan("Humidity: " + weatherInfo.main.humidity + "%\n\n"),
+                    GetDefaultSpan(Messages.GetCountryMessage(weatherInfo.sys.country)),
+                    GetDefaultSpan(Messages.GetCityMessage(weatherInfo.name)),
+                    GetDefaultSpan(Messages.GetDatetimeMessage()),
+                    GetDefaultSpan(Messages.GetCoordinateMessage(weatherInfo.coord.lat, weatherInfo.coord.lon)),
+                    GetDefaultSpan(Messages.GetWeatherStatusMessage(weatherInfo.weather[0].main)),
+                    GetDefaultSpan(Messages.GetWeatherDescriptionMessage(weatherInfo.weather[0].description)),
+                    GetDefaultSpan(Messages.GetExactTemperatureMessage(weatherInfo.main.temp)),
+                    GetDefaultSpan(Messages.GetTemparatureRangeMessage(weatherInfo.main.temp_min, weatherInfo.main.temp_max)),
+                    GetDefaultSpan(Messages.GetWindMessage(weatherInfo.wind.speed, weatherInfo.wind.deg)),
+                    GetDefaultSpan(Messages.GetPressureMessage(weatherInfo.main.pressure)),
+                    GetDefaultSpan(Messages.GetHumidityMessage(weatherInfo.main.humidity)),
                 }
             };
         }
