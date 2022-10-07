@@ -1,14 +1,12 @@
-﻿using LocationWeather.Utils;
-using OpenWeatherMap.repository;
-using System.Collections.Generic;
+﻿using LocationWeather.Repositories;
+using LocationWeather.Utils;
 using Xamarin.Forms;
-using Xamarin.Forms.Internals;
 
 namespace LocationWeather.Pages.MainPageContent
 {
     public class MainPageFormattedStrings {
 
-        public static FormattedString GetMainPageContent(string location, RootObject weatherInfo) {
+        public static FormattedString GetMainPageFormattedStringContent(string location, RootObject weatherInfo) {
             
             if (string.IsNullOrEmpty(location))
                 return NoCityFormattedString;

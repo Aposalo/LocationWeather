@@ -4,8 +4,8 @@ using RestSharp;
 
 namespace LocationWeather.Api
 {
-    public static class OpenWeatherMapApi
-    {
+    public static class OpenWeatherMapApi {
+        
         private readonly static RestClient restClient = new RestClient(Constants.URL);
 
         public static RestResponse<RootObject> GetWeatherInfo(string location) {

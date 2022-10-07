@@ -1,15 +1,18 @@
 ﻿using LocationWeather.Pages.MainPageContent;
-using OpenWeatherMap.Model;
-using OpenWeatherMap.repository;
+using LocationWeather.Repositories;
+using LocationWeather.Models;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace LocationWeather {
+namespace LocationWeather
+{
 
     public class MainPage : ContentPage {
 
         private OpenWeatherMapModel model = new OpenWeatherMapModel();
-        private RootObject weatherInfo = null;
+        private RootObject weatherInfo;
         private Entry entryLocation;
+        private Frame mainPageContent;
 
         public MainPage() {
             entryLocation = new Entry {
@@ -21,11 +24,14 @@ namespace LocationWeather {
         }
 
         private void InitializeComponent() {
-            
-            var formattedString = MainPageFormattedStrings.GetMainPageContent(entryLocation.Text, weatherInfo);
-            
-            Content = new ScrollView { 
-                Content = new StackLayout {
+            mainPageContent = MainPageContentFrame.GetMainPageContent(entryLocation.Text, weatherInfo);
+            InitializeContent();
+        }
+
+        private void InitializeContent() {
+            Content = new ScrollView {
+                Content =
+                new StackLayout {
                     BackgroundColor = Color.DarkGreen,
                     Children = {
                         new Frame {
@@ -37,41 +43,44 @@ namespace LocationWeather {
                                 TextColor = Color.LightGreen
                             },
                             BackgroundColor = Color.ForestGreen,
-                                    },
+                        },
                         new Frame {
-                                        BackgroundColor = Color.ForestGreen,
-                                        Content = new StackLayout {
-                                            BackgroundColor = Color.ForestGreen,
-                                            Children = {
-                                                entryLocation,
-                                                new Button {
-                                                    BackgroundColor = Color.DarkGreen,
-                                                    TextColor = Color.LimeGreen,
-                                                    Text = "Apply",
-                                                    Command = new Command(OnButtonClicked),
-                                                    HorizontalOptions = LayoutOptions.Center
-                                                }
-                                            }
-                                        }
-                                    },
-                        new Label {
-                                        BackgroundColor = Color.ForestGreen,
-                                        FontSize = 18,
-                                        Margin = new Thickness(10, 10, 10, 10),
-                                        FormattedText = formattedString
+                            BackgroundColor = Color.ForestGreen,
+                            Content = new StackLayout {
+                                BackgroundColor = Color.ForestGreen,
+                                Children = {
+                                    entryLocation,
+                                    new Button {
+                                        BackgroundColor = Color.DarkGreen,
+                                        TextColor = Color.LimeGreen,
+                                        Text = "Apply",
+                                        Command = new Command(OnButtonClickedAsync),
+                                        HorizontalOptions = LayoutOptions.Center
                                     }
+                                }
+                            }
+                        },
+                        mainPageContent
                     }
                 }
             };
         }
 
-        private void OnButtonClicked(object sender) {
-            
-            if (!string.IsNullOrEmpty(entryLocation.Text)) {
-                weatherInfo = model.GetWeatherInfo(entryLocation.Text);
-            }
+        public void GetWeatherInfo() 
+        {
+            weatherInfo = model.GetWeatherInfo(entryLocation.Text);
+        }
 
+        private async void OnButtonClickedAsync() {
+            if (!string.IsNullOrEmpty(entryLocation.Text)) {
+                mainPageContent = MainPageContentFrame.GetActivityIndicatorMainPageContent();
+                InitializeContent();
+                Task GetInfoThread = new Task(GetWeatherInfo);
+                GetInfoThread.Start();
+                await Task.WhenAll(GetInfoThread);
+            }
             InitializeComponent();
         }
+    
     }
 }

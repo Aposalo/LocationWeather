@@ -1,6 +1,6 @@
 ﻿using LocationWeather.Repositories;
 
-namespace OpenWeatherMap.Model
+namespace LocationWeather.Models
 {
     public class OpenWeatherMapModel {
         
@@ -9,13 +9,7 @@ namespace OpenWeatherMap.Model
 
         public RootObject GetWeatherInfo(string location) {
             var response = openWeatherMapRepository.GetWeatherInfo(location);
-            
-            if (response.IsSuccessful)
-                weatherInfo = response.Data;
-            
-            else
-                weatherInfo = null;
-
+            weatherInfo = response.IsSuccessful ? weatherInfo = response.Data : null;
             return weatherInfo;
         }
     }
