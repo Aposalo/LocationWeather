@@ -1,15 +1,13 @@
-﻿using OpenWeatherMap.repository;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LocationWeather.Repositories;
+using LocationWeather.Utils;
 using Xamarin.Forms;
 
 namespace LocationWeather.Pages.MainPageContent
 {
     public class MainPageFormattedStrings {
 
-        public static FormattedString GetMainPageContent(string location, RootObject weatherInfo) 
-        {
+        public static FormattedString GetMainPageFormattedStringContent(string location, RootObject weatherInfo) {
+            
             if (string.IsNullOrEmpty(location))
                 return NoCityFormattedString;
             
@@ -20,76 +18,46 @@ namespace LocationWeather.Pages.MainPageContent
                 return InitializedFormattedString(weatherInfo);
         }
 
-        public static FormattedString NoCityFormattedString = new FormattedString
+        private static Span GetDefaultSpan(string spanText) 
+        {
+            return new Span
+            {
+                TextColor = Color.LimeGreen,
+                Text = spanText
+            };
+        }
+
+        private static FormattedString NoCityFormattedString = new FormattedString
         {
             Spans = {
-                    new Span {
-                        TextColor = Color.LimeGreen,
-                        Text = "No city was chosen to be displayed."
-                    }
-                }
+                GetDefaultSpan(Constants.NO_CITY_CHOSEN)
+            }
         };
 
-        public static FormattedString WrongCityFormattedString(string city) {
+        private static FormattedString WrongCityFormattedString(string city) {
             return new FormattedString {
                 Spans = {
-                    new Span {
-                        TextColor = Color.LimeGreen,
-                        Text = "City " + city + " does not exist."
-                    }
+                    GetDefaultSpan(Messages.GetNonExistingCityMessage(city))
                 }
             };
         }
 
-        public static FormattedString InitializedFormattedString(RootObject weatherInfo) {
+        private static FormattedString InitializedFormattedString(RootObject weatherInfo) {
+
             return new FormattedString {
                 Spans = {
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Country: " + weatherInfo.sys.country + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "City Name: " + weatherInfo.name + "\n\n"
-                        },
-                        new Span
-                        {
-                            TextColor = Color.LimeGreen,
-                            Text = "DateTime: " + DateTime.Now + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Coordinates: (" + weatherInfo.coord.lat + ", " + weatherInfo.coord.lon + ")" + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text =  "Weather: " + weatherInfo.weather[0].main + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Weather Description: " + weatherInfo.weather[0].description + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Exact Temperature: " + weatherInfo.main.temp + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Temperature: ( " + weatherInfo.main.temp_min + " Kelvin, " + weatherInfo.main.temp_max + " Kelvin)" + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Wind: (" + weatherInfo.wind.speed + " m/s, " + weatherInfo.wind.deg + " degrees)" + "\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text =  "Pressure: " + weatherInfo.main.pressure + " hPa\n\n"
-                        },
-                        new Span {
-                            TextColor = Color.LimeGreen,
-                            Text = "Humidity: " + weatherInfo.main.humidity + "%\n\n"
-                        },
-                    }
+                    GetDefaultSpan(Messages.GetCountryMessage(weatherInfo.sys.country)),
+                    GetDefaultSpan(Messages.GetCityMessage(weatherInfo.name)),
+                    GetDefaultSpan(Messages.GetDatetimeMessage()),
+                    GetDefaultSpan(Messages.GetCoordinateMessage(weatherInfo.coord.lat, weatherInfo.coord.lon)),
+                    GetDefaultSpan(Messages.GetWeatherStatusMessage(weatherInfo.weather[0].main)),
+                    GetDefaultSpan(Messages.GetWeatherDescriptionMessage(weatherInfo.weather[0].description)),
+                    GetDefaultSpan(Messages.GetExactTemperatureMessage(weatherInfo.main.temp)),
+                    GetDefaultSpan(Messages.GetTemparatureRangeMessage(weatherInfo.main.temp_min, weatherInfo.main.temp_max)),
+                    GetDefaultSpan(Messages.GetWindMessage(weatherInfo.wind.speed, weatherInfo.wind.deg)),
+                    GetDefaultSpan(Messages.GetPressureMessage(weatherInfo.main.pressure)),
+                    GetDefaultSpan(Messages.GetHumidityMessage(weatherInfo.main.humidity)),
+                }
             };
         }
     }

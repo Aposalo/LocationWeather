@@ -1,4 +1,4 @@
-﻿namespace OpenWeatherMap.repository
+﻿namespace LocationWeather.Repositories
 {
     public class Clouds
     {

@@ -1,5 +1,4 @@
-﻿
-namespace OpenWeatherMap
+﻿namespace LocationWeather.Repositories
 {
     public class Main
     {

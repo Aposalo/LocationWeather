@@ -1,14 +1,18 @@
 ﻿using LocationWeather.Pages.MainPageContent;
-using OpenWeatherMap.Model;
-using OpenWeatherMap.repository;
+using LocationWeather.Repositories;
+using LocationWeather.Models;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace LocationWeather
 {
+
     public class MainPage : ContentPage {
 
-        private OpenWeatherMapModel model = new OpenWeatherMapModel(new OpenWeatherMapRepository());
+        private OpenWeatherMapModel model = new OpenWeatherMapModel();
+        private RootObject weatherInfo;
         private Entry entryLocation;
+        private Frame mainPageContent;
 
         public MainPage() {
             entryLocation = new Entry {
@@ -16,16 +20,20 @@ namespace LocationWeather
                 TextColor = Color.LimeGreen,
                 Placeholder = "Please enter a city",
             };
-            InitializeComponent("");
+            InitializeComponent();
         }
 
-        private void InitializeComponent(string location) {
-            var weatherInfo = model.GetWeatherInfo(location);
-            var formattedString = MainPageFormattedStrings.GetMainPageContent(location, weatherInfo);
+        private void InitializeComponent() {
+            mainPageContent = MainPageContentFrame.GetMainPageContent(entryLocation.Text, weatherInfo);
+            InitializeContent();
+        }
 
-            Content = new StackLayout {
-                BackgroundColor = Color.DarkGreen,
-                Children = {
+        private void InitializeContent() {
+            Content = new ScrollView {
+                Content =
+                new StackLayout {
+                    BackgroundColor = Color.DarkGreen,
+                    Children = {
                         new Frame {
                             Content = new Label {
                                 Text = "Open Weather Map",
@@ -46,25 +54,33 @@ namespace LocationWeather
                                         BackgroundColor = Color.DarkGreen,
                                         TextColor = Color.LimeGreen,
                                         Text = "Apply",
-                                        Command = new Command(OnButtonClicked),
+                                        Command = new Command(OnButtonClickedAsync),
                                         HorizontalOptions = LayoutOptions.Center
                                     }
                                 }
                             }
                         },
-                        new Label {
-                            BackgroundColor = Color.ForestGreen,
-                            FontSize = 18,
-                            Margin = new Thickness(10, 10, 10, 10),
-                            FormattedText = formattedString
-                        }
+                        mainPageContent
+                    }
                 }
             };
         }
 
-        private void OnButtonClicked(object sender) {
-            model = new OpenWeatherMapModel(new OpenWeatherMapRepository());
-            InitializeComponent(entryLocation.Text);
+        public void GetWeatherInfo() 
+        {
+            weatherInfo = model.GetWeatherInfo(entryLocation.Text);
         }
+
+        private async void OnButtonClickedAsync() {
+            if (!string.IsNullOrEmpty(entryLocation.Text)) {
+                mainPageContent = MainPageContentFrame.GetActivityIndicatorMainPageContent();
+                InitializeContent();
+                Task GetInfoThread = new Task(GetWeatherInfo);
+                GetInfoThread.Start();
+                await Task.WhenAll(GetInfoThread);
+            }
+            InitializeComponent();
+        }
+    
     }
 }
