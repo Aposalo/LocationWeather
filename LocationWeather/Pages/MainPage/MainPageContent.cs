@@ -1,21 +1,20 @@
-﻿using LocationWeather.Pages.MainPageContent;
-using LocationWeather.Repositories;
+﻿using System.Threading.Tasks;
 using LocationWeather.Models;
-using System.Threading.Tasks;
+using LocationWeather.Repositories;
 using Xamarin.Forms;
 
-namespace LocationWeather
-{
+namespace LocationWeather.Pages.MainPage {
+    
+    public class MainPageContent : ContentPage {
 
-    public class MainPage : ContentPage {
+        private readonly OpenWeatherMapModel _model = new OpenWeatherMapModel();
+        private readonly Entry _entryLocation;
+        
+        private RootObject _weatherInfo;
+        private Frame _mainPageContent;
 
-        private OpenWeatherMapModel model = new OpenWeatherMapModel();
-        private RootObject weatherInfo;
-        private Entry entryLocation;
-        private Frame mainPageContent;
-
-        public MainPage() {
-            entryLocation = new Entry {
+        public MainPageContent() {
+            _entryLocation = new Entry {
                 BackgroundColor = Color.ForestGreen,
                 TextColor = Color.LimeGreen,
                 Placeholder = "Please enter a city",
@@ -24,7 +23,7 @@ namespace LocationWeather
         }
 
         private void InitializeComponent() {
-            mainPageContent = MainPageContentFrame.GetMainPageContent(entryLocation.Text, weatherInfo);
+            _mainPageContent = MainPageContentFrame.GetMainPageContent(_entryLocation.Text, _weatherInfo);
             InitializeContent();
         }
 
@@ -49,7 +48,7 @@ namespace LocationWeather
                             Content = new StackLayout {
                                 BackgroundColor = Color.ForestGreen,
                                 Children = {
-                                    entryLocation,
+                                    _entryLocation,
                                     new Button {
                                         BackgroundColor = Color.DarkGreen,
                                         TextColor = Color.LimeGreen,
@@ -60,7 +59,7 @@ namespace LocationWeather
                                 }
                             }
                         },
-                        mainPageContent
+                        _mainPageContent
                     }
                 }
             };
@@ -68,12 +67,12 @@ namespace LocationWeather
 
         public void GetWeatherInfo() 
         {
-            weatherInfo = model.GetWeatherInfo(entryLocation.Text);
+            _weatherInfo = _model.GetWeatherInfo(_entryLocation.Text);
         }
 
         private async void OnButtonClickedAsync() {
-            if (!string.IsNullOrEmpty(entryLocation.Text)) {
-                mainPageContent = MainPageContentFrame.GetActivityIndicatorMainPageContent();
+            if (!string.IsNullOrEmpty(_entryLocation.Text)) {
+                _mainPageContent = MainPageContentFrame.GetActivityIndicatorMainPageContent();
                 InitializeContent();
                 Task GetInfoThread = new Task(GetWeatherInfo);
                 GetInfoThread.Start();

@@ -1,14 +1,14 @@
-﻿using Xamarin.Forms;
+﻿using LocationWeather.Pages.MainPage;
+using Xamarin.Forms;
 
 namespace LocationWeather
 {
-    public partial class App : Application
+    public partial class App
     {
-        public App()
-        {
+        public App() {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainPage = new MainPageContent();
         }
 
         protected override void OnStart()

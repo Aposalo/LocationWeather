@@ -2,9 +2,9 @@
 using LocationWeather.Utils;
 using Xamarin.Forms;
 
-namespace LocationWeather.Pages.MainPageContent
+namespace LocationWeather.Pages.MainPage
 {
-    public class MainPageFormattedStrings {
+    public static class MainPageFormattedStrings {
 
         public static FormattedString GetMainPageFormattedStringContent(string location, RootObject weatherInfo) {
             

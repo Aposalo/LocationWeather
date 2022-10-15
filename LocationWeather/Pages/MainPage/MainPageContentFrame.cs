@@ -1,9 +1,8 @@
 ﻿using LocationWeather.Repositories;
 using Xamarin.Forms;
 
-namespace LocationWeather.Pages.MainPageContent
-{
-    class MainPageContentFrame
+namespace LocationWeather.Pages.MainPage {
+    static class MainPageContentFrame
     {
         public static Frame GetActivityIndicatorMainPageContent()
         {
